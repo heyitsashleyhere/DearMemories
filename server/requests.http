@@ -1,0 +1,10 @@
+POST http://localhost:5000/posts
+Content-Type: application/json
+
+{
+    "creator": "Ashley",
+    "message": "Bye bye 2010",
+    "selectedFile": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAA",
+    "tags": "hello2020, happynewyear",
+    "title": "New Year's Eve 2019"
+}   
