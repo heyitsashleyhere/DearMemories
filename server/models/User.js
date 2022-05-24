@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const required = true
 
-const postSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     creator:      { type: String, required },
     message:      { type: String, required },
     tags: [String],
@@ -13,6 +13,6 @@ const postSchema = mongoose.Schema({
     }
 }, { timestamps: true })
 
-const PostMessage = mongoose.model("PostMessage", postSchema)
+const User = mongoose.model("User", userSchema)
 
-export default PostMessage
+export default User

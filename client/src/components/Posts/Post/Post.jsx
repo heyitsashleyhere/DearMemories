@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import moment from 'moment'
+import axios from 'axios'
 import { Card, CardHeader, CardActions, CardContent, CardMedia, IconButton, Button, Typography, Menu, MenuItem, Popover, Box} from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +13,7 @@ import { PostsContext } from '../../../contexts/PostsContext';
 
 
 export default function Post({ post }) {
-  const { setCurrentId } = useContext(PostsContext)
+  const { setCurrentId, setIsCreate } = useContext(PostsContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteAnchorEl, setDeleteAnchorEl] = useState(null)
   
@@ -36,10 +37,23 @@ export default function Post({ post }) {
 
   function handleEdit() {
     setCurrentId(post._id)
+    setIsCreate(true)
+    setAnchorEl(false)
   }
 
   function handleDelete() {
-    console.log('delete :>> ');
+    axios({
+      method: 'delete',
+      url: `http://localhost:5000/posts/${post._id}`,
+    }).then(console.log).catch(console.log)
+  }
+
+  function handleLike() {
+    axios({
+      method: 'patch',
+      url: `http://localhost:5000/posts/${post._id}/likePost`,
+      data: {}
+    }).then(console.log).catch(console.log)
   }
 
   return (
@@ -86,15 +100,14 @@ export default function Post({ post }) {
       <CardMedia component="img" src={post.selectedFile} alt={post.title} />
       
       <CardContent>
-        <Typography variant='h5' gutterBottom>{post.message}</Typography>
-        {/* <Typography variant='body2'>{moment(post.createdAt).fromNow()}</Typography> */}
+        <Typography variant='body1' gutterBottom>{post.message}</Typography>
         <Typography variant='body2' color="textSecondary">{post.tags.map(tag => `#${tag} `)}</Typography>
       </CardContent>
 
       <CardActions>
-        <Button size="small" color="primary" onClick={() => {}}>
-          <ThumbUpIcon fontSize="small" />
-          Like {post.likeCount}
+        <Button size="small" color="primary" onClick={handleLike}>
+          <ThumbUpIcon fontSize="small" sx={{ mr: 0.5 }}/>
+          &nbsp; Like &nbsp;{post.likeCount}
         </Button>
       </CardActions>
     </Card>

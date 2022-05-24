@@ -3,17 +3,19 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectToDB } from './lib/database.js';
-import postRoutes from './routes/postRoutes.js'
+import postRouter from './routes/postRouter.js';
+import userRouter from './routes/userRouter.js'
 
 dotenv.config()
 const app = express() 
 app.use(cors())
 app.use(express.json())
-app.use('/posts', postRoutes)
 
-app.use(bodyParser.json({ limit: "30mb", extended: true}))
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true}))
+app.use(bodyParser.json({ limit: "100mb", extended: true}))
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true})) //? what is bodyParser
 
+app.use('/posts', postRouter)
+app.use('/user', userRouter)
 
 const PORT = process.env.PORT || 5000
 connectToDB()

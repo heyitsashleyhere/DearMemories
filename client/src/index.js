@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
+import { BrowserRouter } from 'react-router-dom';
 import PostsContextProvider from './contexts/PostsContext.jsx'
+import App from './App.jsx';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <PostsContextProvider>
-        <App />
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     </PostsContextProvider>
 )

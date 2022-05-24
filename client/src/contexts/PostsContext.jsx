@@ -6,6 +6,7 @@ export const PostsContext = React.createContext(null)
 function PostContextProvider({ children }){
     const [posts, setPosts] = useState([])
     const [currentId, setCurrentId] = useState(null)
+    const [isCreate, setIsCreate] = useState(false);
 
     useEffect(() => {
         axios({
@@ -13,12 +14,13 @@ function PostContextProvider({ children }){
             url: 'http://localhost:5000/posts'
         }).then(response => setPosts(response.data))
           .catch(error => console.log('error', error))
-    }, [posts])
+    }, [posts, currentId, isCreate])
     
 
     const postsContextValue = {
         posts,
-        currentId, setCurrentId
+        currentId, setCurrentId,
+        isCreate, setIsCreate
     }
 
     return (

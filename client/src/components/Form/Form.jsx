@@ -5,7 +5,7 @@ import { PostsContext } from '../../contexts/PostsContext'
 
 
 export default function Form() {
-  const { posts, currentId, setCurrentId } = useContext(PostsContext)
+  const { posts, currentId, setCurrentId, setIsCreate } = useContext(PostsContext)
   const [ postData, setPostData ] = useState( 
     { creator: '', message: '', tags: '', selectedFile: '' })
 
@@ -47,6 +47,7 @@ export default function Form() {
       }).then(console.log).catch(console.log)
       setPostData({creator: '', message: '', tags: '', selectedFile: '' })
       setCurrentId(null)
+      setIsCreate(false)
     } else {
       axios({
         method: 'post',
@@ -54,6 +55,7 @@ export default function Form() {
         data: postData
       }).then(console.log).catch(console.log)
       setPostData({creator: '', message: '', tags: '', selectedFile: '' })
+      setIsCreate(false)
     }
 
   }
@@ -64,7 +66,7 @@ export default function Form() {
   }
 
   return (
-    <Paper sx={{ padding: 2 }}>
+    <Paper sx={{ padding: 2 , boxShadow: 0 }}>
       <form autoComplete='off' noValidate onSubmit={handleSubmit}>
         <Typography variant='h6' textAlign='center'>{currentId ? 'Edit a Memory':'Create a Memory'}</Typography>
         <TextField name='creator' variant='outlined' label="Creator" fullWidth 
@@ -72,6 +74,7 @@ export default function Form() {
                    onChange={e => setPostData({ ...postData, creator: e.target.value })}/>
         <TextField name='message' variant='outlined' label="Message" fullWidth 
                    value={postData.message} margin="dense"
+                   multiline rows={4}
                    onChange={e => setPostData({ ...postData, message: e.target.value })}/>
         <TextField name='tags' variant='outlined' label="Tags" fullWidth 
                    value={postData.tags} margin="dense"

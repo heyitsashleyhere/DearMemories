@@ -1,54 +1,49 @@
-// import { useDispatch } from 'react-redux';
-// import { useEffect } from 'react';
-// import { getPosts } from './actions/posts.js';
-import { Container, AppBar, Typography, Grow, Grid } from '@mui/material';
-import logoIcon from './images/love-story-gradient.svg';
+import { useContext } from 'react';
+import { Container, SwipeableDrawer } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
 // Components:
 import Posts from './components/Posts/Posts.jsx';
 import Form from './components/Form/Form.jsx';
+import Navbar from './components/Navbar/Navbar.jsx';
+import Auth from './components/Auth/Auth.jsx';
+// Context:
+import { PostsContext } from './contexts/PostsContext';
+// Style
+import './index.css'
+
+
+
 
 
 
 
 function App() {
-  // const dispatch = useDispatch()
-  // useEffect(() => {
-  //   dispatch(getPosts)
-  // }, [dispatch])
+  const { isCreate, setIsCreate } = useContext(PostsContext)
 
-  const styles = {
-    appBar: {
-        borderRadius: '0.5em',
-        margin: '30px 0',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#DE2261',
-        boxShadow: 1 
-      }
-  }
-  
+  const toggleDrawer = (state) => (event) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setIsCreate(state);
+  };
 
   return (
     <Container maxWidth="lg" className="App">
-      <AppBar position="static" color="inherit" sx={styles.appBar}>
-        <Typography variant='h3' align='center'>Dear Nikki</Typography>
-        <img src={logoIcon} alt="Dear Nikki Icon" height={40}/>
-      </AppBar>
-      <Grow in>
-        <Container>
-          <Grid container justify="space-between" alignItems="stretch" spacing={3}>
-            <Grid item xs={12} sm={7}>
-              <Posts />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form />
-            </Grid>
-
-          </Grid>
-        </Container>
-      </Grow>
+      <Navbar />
+      <Routes >
+        <Route path="/" element={<Posts />}/>
+        <Route path="/auth" element={<Auth />}/>
+      </Routes>
+      <SwipeableDrawer anchor='right' open={isCreate}
+                       onClose={toggleDrawer(false)}
+                       onOpen={toggleDrawer(true)} >          
+            <Form />
+      </SwipeableDrawer>
     </Container>
   )
 }

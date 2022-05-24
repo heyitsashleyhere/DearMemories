@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Grid, CircularProgress } from '@mui/material'
+import { Grid, CircularProgress, Grow } from '@mui/material'
 // Component
 import Post from './Post/Post.jsx'
 import { PostsContext } from '../../contexts/PostsContext.jsx'
@@ -13,13 +13,15 @@ export default function Posts() {
   
   return (
     !posts.length ? <CircularProgress /> : (
-      <Grid container alignItems="stretch" spacing={3}>
-        {posts.map(post => (
-          <Grid key={post._id} item xs={12} sm={6}>
-            <Post post={post}/>
-          </Grid>
-        ))}
-      </Grid>
+      <Grow in>
+        <Grid container alignItems="stretch" spacing={3}>
+          {posts.map(post => (
+            <Grid key={post._id} container item xs={12} sm={4} md={3}>
+              <Post post={post}/>
+            </Grid>
+          ))}
+        </Grid>
+      </Grow>
     )
   )
 }
