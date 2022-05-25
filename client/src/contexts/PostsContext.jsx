@@ -7,6 +7,7 @@ function PostContextProvider({ children }){
     const [posts, setPosts] = useState([])
     const [currentId, setCurrentId] = useState(null)
     const [isCreate, setIsCreate] = useState(false);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
 
     useEffect(() => {
         axios({
@@ -20,7 +21,8 @@ function PostContextProvider({ children }){
     const postsContextValue = {
         posts,
         currentId, setCurrentId,
-        isCreate, setIsCreate
+        isCreate, setIsCreate,
+        user, setUser
     }
 
     return (

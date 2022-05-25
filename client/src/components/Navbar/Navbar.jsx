@@ -3,26 +3,36 @@ import axios from 'axios'
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PostsContext } from '../../contexts/PostsContext';
 
-import { AppBar, Button, Toolbar, Avatar, Box } from '@mui/material';
+import { AppBar, Button, Toolbar, Avatar, Box, Tooltip, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import logoIcon from '../../images/love-story.svg';
 
+const settings = ['Profile', 'Sign Out'];
 
 export default function Navbar() {
-    const { isCreate, setIsCreate } = useContext(PostsContext)
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+    const { isCreate, setIsCreate, user, setUser } = useContext(PostsContext)
+    const [anchorElUser, setAnchorElUser] = useState(null);
     const navigate = useNavigate()
     const location = useLocation()
-    // useEffect(() => {
-    //   const token = user?.token
 
-    //   setUser(JSON.parse(localStorage.getItem('profile')))
-    // }, [location])
+    useEffect(() => {
+      const token = user?.token
+
+      setUser(JSON.parse(localStorage.getItem('profile')))
+    }, [location])
+
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
     
-    function signOut() {
-        localStorage.clear()
-        navigate('/')
-        setUser(null)
-    }
+    const handleCloseUserMenu = (setting) => {
+        setAnchorElUser(null);
+        if(setting === settings[1]) {
+            localStorage.clear()
+            navigate('/auth')
+            setUser(null)
+        }
+    };
+
 
     const styles = {
         appBar: {
@@ -37,25 +47,49 @@ export default function Navbar() {
             boxShadow: 1 ,
             // backgroundColor: 'rgb(255, 255, 255, 0)'
           }
-      }
+    }
+
       
     return (
         <AppBar position="static" color="inherit" sx={styles.appBar}>
 
-            <Box component={Link} to="/" sx={{ ml: 1}}>
+            <Box component={Link} to="/">
                 <img src={logoIcon} alt="Dear Dir Icon" height={50} />
             </Box>
             
             <Button variant="outlined" onClick={() => setIsCreate(!isCreate)}>Create</Button>
 
-            <Toolbar>
+            <Toolbar disableGutters>
                 { user ? 
-                    <div>
-                        <Avatar alt={'username'} src="">
-                            {user.result.username.charAt(0)}
-                        </Avatar>
-                        <Button variant="contained" color="secondary" onClick={signOut}>Sign Out</Button>
-                    </div> 
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip title="Open settings">
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <Avatar alt="profile" src="" />
+                        </IconButton>
+                        </Tooltip>
+                        <Menu
+                        sx={{ mt: '45px' }}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                        >
+                        {settings.map((setting) => (
+                            <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                            <Typography textAlign="center">{setting}</Typography>
+                            </MenuItem>
+                        ))}
+                        </Menu>
+                    </Box>
                     : 
                     <div>
                         <Button component={Link} to="/auth" variant="contained" color="primary">Sign in</Button>

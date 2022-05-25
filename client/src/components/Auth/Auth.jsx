@@ -17,6 +17,8 @@ export default function Auth() {
     const [formData, setFormData] = useState(initialFormData)
     const navigate = useNavigate()
 
+    
+
     function handleShowPassword() {
         setShowPassword(!showPassword)
     }
@@ -28,16 +30,25 @@ export default function Auth() {
         if(isSignUp) {
             axios({
                 method: 'post',
-                url: `http://localhost:5000/users`,
+                url: `http://localhost:5000/users/signup`,
                 data: formData
-              }).then(console.log).catch(console.log)
+              }).then(result => {
+                const token = result.data.token
+                const localUser = result.data.result
+                localStorage.setItem('profile', JSON.stringify({token, localUser}))
+                navigate('/') 
+              }).catch(console.log)
         } else {
             axios({
                 method: 'post',
-                url: `http://localhost:5000/users`,
+                url: `http://localhost:5000/users/signin`,
                 data: formData
-              }).then(console.log).catch(console.log)
-            navigate('/')
+              }).then(result => {
+                const token = result.data.token
+                const localUser = result.data.result
+                localStorage.setItem('profile', JSON.stringify({token, localUser}))
+                navigate('/') 
+              }).catch(console.log)
         }
     }
 
@@ -54,7 +65,7 @@ export default function Auth() {
         const result = res?.profileObj; //optional chaining
         const token = res?.tokenId;
         try {
-            localStorage.setIfem('profile', JSON.stringify({result, token}))
+            localStorage.setItem('profile', JSON.stringify({result, token}))
             // axios({
             //     method: 'post',
             //     url: `http://localhost:5000/auth`,

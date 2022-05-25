@@ -1,18 +1,20 @@
 import mongoose from "mongoose";
 
+const { Schema, model } = mongoose
 const required = true
+// const lowercase = true
 
-const postSchema = mongoose.Schema({
-    creator:      { type: String, required },
+const postSchema = Schema({
+    user:         { type: Schema.Types.ObjectId, ref: "user", required },
     message:      { type: String, required },
-    tags: [String],
+    tags:         { type: Array },
     selectedFile: { type: String, required },
-    likeCount: {
-        type: Number,
-        default: 0
+    likes: {
+        type: [String],
+        default: []
     }
 }, { timestamps: true })
 
-const Post = mongoose.model("Post", postSchema)
+const Post = model("Post", postSchema)
 
 export default Post

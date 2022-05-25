@@ -14,9 +14,6 @@ import './index.css'
 
 
 
-
-
-
 function App() {
   const { isCreate, setIsCreate } = useContext(PostsContext)
 

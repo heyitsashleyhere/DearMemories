@@ -5,9 +5,9 @@ import { PostsContext } from '../../contexts/PostsContext'
 
 
 export default function Form() {
-  const { posts, currentId, setCurrentId, setIsCreate } = useContext(PostsContext)
+  const { posts, currentId, setCurrentId, setIsCreate, user } = useContext(PostsContext)
   const [ postData, setPostData ] = useState( 
-    { creator: '', message: '', tags: '', selectedFile: '' })
+    { user: user.localUser._id, message: '', tags: '', selectedFile: '' })
 
   const editPost = posts.find(p => p._id === currentId)
   
@@ -43,25 +43,31 @@ export default function Form() {
       axios({
         method: 'patch',
         url: `http://localhost:5000/posts/${currentId}`,
-        data: postData
+        data: postData,
+        headers: {
+          Authorization: 'Bearer ' + user.token
+        }
       }).then(console.log).catch(console.log)
-      setPostData({creator: '', message: '', tags: '', selectedFile: '' })
+      setPostData({user: '', message: '', tags: '', selectedFile: '' })
       setCurrentId(null)
       setIsCreate(false)
     } else {
       axios({
         method: 'post',
         url: 'http://localhost:5000/posts',
-        data: postData
+        data: postData,
+        headers: {
+          Authorization: 'Bearer ' + user.token
+        }
       }).then(console.log).catch(console.log)
-      setPostData({creator: '', message: '', tags: '', selectedFile: '' })
+      setPostData({user: '', message: '', tags: '', selectedFile: '' })
       setIsCreate(false)
     }
 
   }
 
   function clearBtn() {
-    setPostData({creator: '', message: '', tags: '', selectedFile: '' })
+    setPostData({user: '', message: '', tags: '', selectedFile: '' })
     setCurrentId(null)
   }
 
@@ -69,9 +75,6 @@ export default function Form() {
     <Paper sx={{ padding: 2 , boxShadow: 0 }}>
       <form autoComplete='off' noValidate onSubmit={handleSubmit}>
         <Typography variant='h6' textAlign='center'>{currentId ? 'Edit a Memory':'Create a Memory'}</Typography>
-        <TextField name='creator' variant='outlined' label="Creator" fullWidth 
-                   value={postData.creator} margin="dense"
-                   onChange={e => setPostData({ ...postData, creator: e.target.value })}/>
         <TextField name='message' variant='outlined' label="Message" fullWidth 
                    value={postData.message} margin="dense"
                    multiline rows={4}

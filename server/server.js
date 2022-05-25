@@ -15,7 +15,7 @@ app.use(bodyParser.json({ limit: "100mb", extended: true}))
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true})) //? what is bodyParser
 
 app.use('/posts', postRouter)
-app.use('/user', userRouter)
+app.use('/users', userRouter)
 
 const PORT = process.env.PORT || 5000
 connectToDB()

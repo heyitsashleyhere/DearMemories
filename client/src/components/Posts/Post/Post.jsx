@@ -13,7 +13,7 @@ import { PostsContext } from '../../../contexts/PostsContext';
 
 
 export default function Post({ post }) {
-  const { setCurrentId, setIsCreate } = useContext(PostsContext)
+  const { setCurrentId, setIsCreate, user } = useContext(PostsContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteAnchorEl, setDeleteAnchorEl] = useState(null)
   
@@ -45,6 +45,9 @@ export default function Post({ post }) {
     axios({
       method: 'delete',
       url: `http://localhost:5000/posts/${post._id}`,
+      headers: {
+        Authorization: 'Bearer ' + user.token
+      }
     }).then(console.log).catch(console.log)
   }
 
@@ -52,7 +55,10 @@ export default function Post({ post }) {
     axios({
       method: 'patch',
       url: `http://localhost:5000/posts/${post._id}/likePost`,
-      data: {}
+      data: {},
+      headers: {
+        Authorization: 'Bearer ' + user.token
+      }
     }).then(console.log).catch(console.log)
   }
 
@@ -107,7 +113,7 @@ export default function Post({ post }) {
       <CardActions>
         <Button size="small" color="primary" onClick={handleLike}>
           <ThumbUpIcon fontSize="small" sx={{ mr: 0.5 }}/>
-          &nbsp; Like &nbsp;{post.likeCount}
+          &nbsp; Like &nbsp;{post.likes.length}
         </Button>
       </CardActions>
     </Card>

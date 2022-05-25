@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 
+const { Schema, model } = mongoose
 const required = true
+const trim = true
+const unique = true
 
-const userSchema = mongoose.Schema({
-    creator:      { type: String, required },
-    message:      { type: String, required },
-    tags: [String],
-    selectedFile: { type: String, required },
-    likeCount: {
-        type: Number,
-        default: 0
-    }
+const userSchema = new Schema({
+    firstName: { type: String, required, trim },
+    lastName:  { type: String, required, trim },
+    email:     { type: String, required, unique },
+    password:  { type: String, required },
+    posts:     { type: [Schema.Types.ObjectId], ref: "posts" }
+
 }, { timestamps: true })
 
 const User = mongoose.model("User", userSchema)
