@@ -16,6 +16,9 @@ app.use(bodyParser.urlencoded({ limit: "100mb", extended: true})) //? what is bo
 
 app.use('/posts', postRouter)
 app.use('/users', userRouter)
+app.use((error, req, res, next) => {
+    res.send({ status: error.status, message: error.message })
+})
 
 const PORT = process.env.PORT || 5000
 connectToDB()

@@ -43,11 +43,18 @@ export default function Auth() {
                 url: `http://localhost:5000/users/signin`,
                 data: formData
               }).then(result => {
-                const token = result.data.token
-                const localUser = result.data.result
-                localStorage.setItem('profile', JSON.stringify({token, localUser}))
-                navigate('/') 
-              }).catch(console.log)
+                  console.log(result);
+                if(result.data.token) {
+                    const token = result.data.token
+                    const localUser = result.data.result
+                    localStorage.setItem('profile', JSON.stringify({token, localUser}))
+                    navigate('/') 
+                } else {
+                    navigate('/auth') 
+                    console.log('result :>> ', result.data.message)
+                }
+               
+              }).catch(error => console.log(error.response.data))
         }
     }
 

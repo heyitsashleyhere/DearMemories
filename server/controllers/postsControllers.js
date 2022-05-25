@@ -79,7 +79,6 @@ export async function likePost(req, res) {
         post.likes = post.likes.filter(id => id !== String(req.userId))
     }
 
-    // remove: { likeCount: post.likeCount + 1}
     const updatedPost = await Post.findByIdAndUpdate(_id, post, { new: true })
     res.json({message: "Liked"})
 }

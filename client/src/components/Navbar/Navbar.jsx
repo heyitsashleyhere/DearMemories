@@ -13,13 +13,12 @@ export default function Navbar() {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const navigate = useNavigate()
     const location = useLocation()
-
+    
     useEffect(() => {
       const token = user?.token
 
       if(token) {
           const decodedToken = decode(token)
-          console.log(decodedToken.exp);
           if(decodedToken.exp * 1000 < new Date().getTime()) {
               localStorage.clear()
               navigate('/auth')
@@ -41,7 +40,6 @@ export default function Navbar() {
         }
     };
 
-
     const styles = {
         appBar: {
             margin: '30px 0',
@@ -51,12 +49,18 @@ export default function Navbar() {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            color: '#DE2261',
             boxShadow: 1 ,
-            // backgroundColor: 'rgb(255, 255, 255, 0)'
-          }
+            // backgroundColor: 'rgb(255, 255, 255, 0)', color: '#DE2261',
+          },
+        appBrand: { 
+            display: { xs: 'none', md: 'flex' }, 
+            fontFamily: 'monospace', 
+            fontWeight: 700,
+            letterSpacing: '.3rem', 
+            color: '#7B1FA2', 
+            textDecoration: 'none'
+        }
     }
-
       
     return (
         <AppBar position="static" color="inherit" sx={styles.appBar}>
@@ -64,10 +68,9 @@ export default function Navbar() {
             <Box component={Link} to="/">
                 <img src={logoIcon} alt="Dear Memories Icon" height={50} />
             </Box>
-            <Typography variant="h6" noWrap component="a" href="/"
-                        sx={{ display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700,
-                            letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none',
-                            }} >DEAR MEMORIES</Typography>
+            <Typography variant="h6" noWrap component="a" href="/" sx={styles.appBrand} >
+                DEAR MEMORIES
+            </Typography>
 
             <Toolbar disableGutters>
                 { user ? 

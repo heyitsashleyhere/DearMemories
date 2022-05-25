@@ -6,6 +6,7 @@ import Posts from './components/Posts/Posts.jsx';
 import Form from './components/Form/Form.jsx';
 import Navbar from './components/Navbar/Navbar.jsx';
 import Auth from './components/Auth/Auth.jsx';
+import { Alert } from '@mui/material';
 // Context:
 import { PostsContext } from './contexts/PostsContext';
 // Style
@@ -15,7 +16,7 @@ import './index.css'
 
 
 function App() {
-  const { isCreate, setIsCreate } = useContext(PostsContext)
+  const { isCreate, setIsCreate, user } = useContext(PostsContext)
 
   const toggleDrawer = (state) => (event) => {
     if (
@@ -32,6 +33,7 @@ function App() {
   return (
     <Container maxWidth="lg" className="App">
       <Navbar />
+      {!user ? <Alert severity="info" sx={{mb: 3}}>Please sign in to create your memories and like other's memories</Alert> : null}
       <Routes >
         <Route path="/" element={<Posts />}/>
         <Route path="/auth" element={<Auth />}/>
