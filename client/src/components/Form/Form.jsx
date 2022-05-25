@@ -79,7 +79,7 @@ export default function Form() {
                    value={postData.message} margin="dense"
                    multiline rows={4}
                    onChange={e => setPostData({ ...postData, message: e.target.value })}/>
-        <TextField name='tags' variant='outlined' label="Tags" fullWidth 
+        <TextField name='tags' variant='outlined' label="Tags (separated by comma)" fullWidth 
                    value={postData.tags} margin="dense"
                    onChange={e => {
                      const removeSpaces = e.target.value.replace(/\s+/g, '')
