@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react'
 import moment from 'moment'
 import axios from 'axios'
 import { Card, CardHeader, CardActions, CardContent, CardMedia, IconButton, Button, Typography, Menu, MenuItem, Popover, Box} from '@mui/material'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -62,15 +63,27 @@ export default function Post({ post }) {
     }).then(console.log).catch(console.log)
   }
 
+  // Likes component
+  function Likes() {
+    if (post.likes.length > 0) {
+      return post.likes.find(like => like === (user?.localUser.googleId || user?.localUser._id)) ? 
+        <><ThumbUpAltIcon fontSize='small'/>&nbsp;{post.likes.length > 2 ? `You and ${post.likes.length - 1} others` : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}</>
+        :
+        <><ThumbUpOffAltIcon fontSize='small'/>&nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}</>
+    }
+    return <><ThumbUpOffAltIcon fontSize='small'/>&nbsp;Like</>
+  }
+
   return (
     <Card>
       <CardHeader
         avatar={
           <Avatar aria-label={post.creator}>
-            {post.creator}
+            {post.user}
           </Avatar>
         }
         action={
+          user?
           <>
             <IconButton aria-label="edit"
                         aria-controls={openFeatures ? 'basic-menu' : undefined}
@@ -98,6 +111,7 @@ export default function Post({ post }) {
               </Popover>
             </Menu>
           </>
+          : <></>
         } 
         title={post.creator}
         subheader={moment(post.createdAt).fromNow()}
@@ -112,8 +126,9 @@ export default function Post({ post }) {
 
       <CardActions>
         <Button size="small" color="primary" onClick={handleLike}>
-          <ThumbUpIcon fontSize="small" sx={{ mr: 0.5 }}/>
-          &nbsp; Like &nbsp;{post.likes.length}
+          <Likes />
+          {/* <ThumbUpIcon fontSize="small" sx={{ mr: 0.5 }}/>
+          &nbsp; Like &nbsp;{post.likes.length} */}
         </Button>
       </CardActions>
     </Card>

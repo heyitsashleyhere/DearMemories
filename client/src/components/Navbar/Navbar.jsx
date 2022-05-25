@@ -2,7 +2,6 @@ import React,  { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PostsContext } from '../../contexts/PostsContext';
-
 import { AppBar, Button, Toolbar, Avatar, Box, Tooltip, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import logoIcon from '../../images/love-story.svg';
 
@@ -54,18 +53,24 @@ export default function Navbar() {
         <AppBar position="static" color="inherit" sx={styles.appBar}>
 
             <Box component={Link} to="/">
-                <img src={logoIcon} alt="Dear Dir Icon" height={50} />
+                <img src={logoIcon} alt="Dear Memories Icon" height={50} />
             </Box>
-            
-            <Button variant="outlined" onClick={() => setIsCreate(!isCreate)}>Create</Button>
+            <Typography variant="h6" noWrap component="a" href="/"
+                        sx={{ display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700,
+                            letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none',
+                            }} >DEAR MEMORIES</Typography>
 
             <Toolbar disableGutters>
                 { user ? 
                     <Box sx={{ flexGrow: 0 }}>
+                        <Button variant="contained" 
+                                sx={{ mr: 1, display: 'inline-block' }}
+                                onClick={() => setIsCreate(!isCreate)}>Create</Button>
+
                         <Tooltip title="Open settings">
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="profile" src="" />
-                        </IconButton>
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="profile" src="" />
+                            </IconButton>
                         </Tooltip>
                         <Menu
                         sx={{ mt: '45px' }}
