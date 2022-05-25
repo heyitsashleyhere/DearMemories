@@ -1,5 +1,6 @@
 import React,  { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import decode from 'jwt-decode'
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PostsContext } from '../../contexts/PostsContext';
 import { AppBar, Button, Toolbar, Avatar, Box, Tooltip, IconButton, Menu, MenuItem, Typography } from '@mui/material';
@@ -16,6 +17,14 @@ export default function Navbar() {
     useEffect(() => {
       const token = user?.token
 
+      if(token) {
+          const decodedToken = decode(token)
+          console.log(decodedToken.exp);
+          if(decodedToken.exp * 1000 < new Date().getTime()) {
+              localStorage.clear()
+              navigate('/auth')
+          }
+      }
       setUser(JSON.parse(localStorage.getItem('profile')))
     }, [location])
 

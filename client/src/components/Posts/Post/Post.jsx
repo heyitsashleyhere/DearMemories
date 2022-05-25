@@ -78,12 +78,12 @@ export default function Post({ post }) {
     <Card>
       <CardHeader
         avatar={
-          <Avatar aria-label={post.creator}>
+          <Avatar aria-label={post.user}>
             {post.user}
           </Avatar>
         }
         action={
-          user?
+          user?.localUser?._id === post?.user ?
           <>
             <IconButton aria-label="edit"
                         aria-controls={openFeatures ? 'basic-menu' : undefined}
@@ -125,10 +125,8 @@ export default function Post({ post }) {
       </CardContent>
 
       <CardActions>
-        <Button size="small" color="primary" onClick={handleLike}>
+        <Button size="small" color="primary" disabled={!user?.token} onClick={handleLike}>
           <Likes />
-          {/* <ThumbUpIcon fontSize="small" sx={{ mr: 0.5 }}/>
-          &nbsp; Like &nbsp;{post.likes.length} */}
         </Button>
       </CardActions>
     </Card>

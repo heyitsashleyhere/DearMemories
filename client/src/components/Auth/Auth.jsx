@@ -25,8 +25,7 @@ export default function Auth() {
 
     function handleSubmit(e){
         e.preventDefault()
-        console.log('formData :>> ', formData);
-
+        // console.log('formData :>> ', formData);
         if(isSignUp) {
             axios({
                 method: 'post',

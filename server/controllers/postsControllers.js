@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Post from "../models/Post.js"
+import User from "../models/User.js";
 
 export async function getPosts(req, res) {
     try {
@@ -13,8 +14,14 @@ export async function getPosts(req, res) {
 export async function createPost(req, res) {
     const post = req.body;
     const newPost = new Post(post)
+    const user = await User.findById(req.body.user)
+
     try {
         await newPost.save()
+         // need to push the post to the user's post array
+        user.posts.push(newPost)
+        await user.save()
+
         res.status(201).json(newPost)
     } catch (error) {
         console.log('error :>> ', error);
@@ -28,21 +35,26 @@ export async function updatePost(req, res) {
     if(!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(404).send('No post with that id')
     }
-
-    console.log(req.body);
+    // console.log(req.body);
     const updatedPost = await Post.findByIdAndUpdate(_id, req.body, { new: true })
     res.json({message: 'Updated'})
 }
 
 export async function deletePost(req, res) {
     const { id:_id } = req.params
+    const post = await Post.findById(_id)
+    const user = await User.findById(post.user)
 
     if(!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(404).send('No post with that id')
     }
-
-    await Post.findByIdAndDelete(_id)
-    res.json({ message: "Deleted"})
+    
+    const postIndex = user.posts.indexOf(_id)
+    user.posts.splice(postIndex, 1)
+    await user.save()
+    await post.remove()
+    // await Post.findByIdAndDelete(_id)
+    res.json({ message: "Deleted", deleted: post })
 }
 
 export async function likePost(req, res) {
