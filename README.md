@@ -22,6 +22,8 @@ A mock instagram app created to apply my backend knowledge using (MongoDB, Expre
 
 4. Storing cookies
 
+5. Extra features: comments, filters and search.
+
 ## 💡 Special Thanks
 - [JavaScript Mastery Tutorial](https://www.youtube.com/watch?v=VsUzmlZfYNg)
 - [My amazing backend Instructor Joel](https://github.com/Req)
