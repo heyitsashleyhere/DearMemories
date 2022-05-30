@@ -14,7 +14,7 @@ import { PostsContext } from '../../../contexts/PostsContext';
 
 
 export default function Post({ post }) {
-  const { setCurrentId, setIsCreate, user } = useContext(PostsContext)
+  const { setCurrentId, setIsCreate, user, setIsSuccess, setSuccessMsg } = useContext(PostsContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteAnchorEl, setDeleteAnchorEl] = useState(null)
   
@@ -49,7 +49,13 @@ export default function Post({ post }) {
       headers: {
         Authorization: 'Bearer ' + user.token
       }
-    }).then(console.log).catch(console.log)
+    }).then(result => {
+      console.log("result", result.status)
+      if(result.status === 200){
+        setIsSuccess(true)
+        setSuccessMsg("deleted")
+      }
+    }).catch(console.log)
   }
 
   function handleLike() {

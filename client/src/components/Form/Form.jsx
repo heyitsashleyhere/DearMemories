@@ -5,7 +5,8 @@ import { PostsContext } from '../../contexts/PostsContext'
 
 
 export default function Form() {
-  const { posts, currentId, setCurrentId, setIsCreate, user } = useContext(PostsContext)
+  const { posts, currentId, setCurrentId, setIsCreate, user,
+          setIsSuccess, setSuccessMsg } = useContext(PostsContext)
   const [ postData, setPostData ] = useState( 
     { user: user.localUser._id, message: '', tags: '', selectedFile: '' })
 
@@ -47,7 +48,13 @@ export default function Form() {
         headers: {
           Authorization: 'Bearer ' + user.token
         }
-      }).then(console.log).catch(console.log)
+      }).then(result => {
+        console.log("result", result.status)
+        if(result.status === 200){
+          setIsSuccess(true)
+          setSuccessMsg("updated")
+        }
+      }).catch(console.log)
       setPostData({user: '', message: '', tags: '', selectedFile: '' })
       setCurrentId(null)
       setIsCreate(false)
@@ -59,7 +66,12 @@ export default function Form() {
         headers: {
           Authorization: 'Bearer ' + user.token
         }
-      }).then(console.log).catch(console.log)
+      }).then(result => {
+        console.log("result", result.status)
+        if(result.status === 201){
+          setIsSuccess(true)
+          setSuccessMsg("created")}
+        }).catch(console.log)
       setPostData({user: '', message: '', tags: '', selectedFile: '' })
       setIsCreate(false)
     }

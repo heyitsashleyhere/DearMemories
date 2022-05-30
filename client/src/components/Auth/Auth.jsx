@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from 'react-google-login';
 // MUI
-import { Avatar, Button, Paper, Grid, Typography, Container, Grow } from '@mui/material';
+import { Avatar, Button, Paper, Grid, Typography, Container, Grow, Alert } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 // Component and style:
 import Input from './Input.jsx';
@@ -15,6 +15,7 @@ export default function Auth() {
     const [showPassword, setShowPassword] = useState(false)
     const [isSignUp, setIsSignUp] = useState(false)
     const [formData, setFormData] = useState(initialFormData)
+    const [alert, setAlert] = useState("")
     const navigate = useNavigate()
 
     
@@ -36,14 +37,14 @@ export default function Auth() {
                 const localUser = result.data.result
                 localStorage.setItem('profile', JSON.stringify({token, localUser}))
                 navigate('/') 
-              }).catch(console.log)
+              }).catch(error => setAlert(error.response.data.message))
         } else {
             axios({
                 method: 'post',
                 url: `http://localhost:5000/users/signin`,
                 data: formData
               }).then(result => {
-                  console.log(result);
+                //   console.log(result);
                 if(result.data.token) {
                     const token = result.data.token
                     const localUser = result.data.result
@@ -51,10 +52,11 @@ export default function Auth() {
                     navigate('/') 
                 } else {
                     navigate('/auth') 
+                    setAlert(result.data.message)
                     console.log('result :>> ', result.data.message)
                 }
                
-              }).catch(error => console.log(error.response.data))
+              }).catch(error => setAlert(error.response.data.message))
         }
     }
 
@@ -63,6 +65,7 @@ export default function Auth() {
     }
 
     function switchMode() {
+        setAlert("")
         setIsSignUp(!isSignUp)
         setShowPassword(false)
     }
@@ -111,6 +114,8 @@ export default function Auth() {
                             isSignUp && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type='password' autoFocus />
                         }
                     </Grid>
+
+                    {alert && <Alert severity="error" sx={{mt:2}} onClose={() => {setAlert("")}}>{alert}</Alert>}
                     <Button type="submit" fullWidth variant="contained" color="primary" sx={{mt:2, mb:1}}>{isSignUp ? "Sign Up" : "Sign In"}</Button>
                     
                     <GoogleLogin

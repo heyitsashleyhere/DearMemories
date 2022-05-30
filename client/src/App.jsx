@@ -16,7 +16,8 @@ import './index.css'
 
 
 function App() {
-  const { isCreate, setIsCreate, user } = useContext(PostsContext)
+  const { isCreate, setIsCreate, user, 
+          isSuccess, setIsSuccess, successMsg, setSuccessMsg } = useContext(PostsContext)
 
   const toggleDrawer = (state) => (event) => {
     if (
@@ -34,6 +35,8 @@ function App() {
     <Container maxWidth="lg" className="App">
       <Navbar />
       {!user ? <Alert severity="info" sx={{mb: 3}}>Please sign in to create your memories and like other's memories</Alert> : null}
+      {isSuccess ? <Alert severity="success" sx={{mb: 3}}
+                          onClick={()=> {setIsSuccess(false);setSuccessMsg("")}}>You have successfully {successMsg} your post</Alert> : null}
       <Routes >
         <Route path="/" element={<Posts />}/>
         <Route path="/auth" element={<Auth />}/>

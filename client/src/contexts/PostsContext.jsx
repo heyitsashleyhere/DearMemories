@@ -7,6 +7,8 @@ function PostContextProvider({ children }){
     const [posts, setPosts] = useState([])
     const [currentId, setCurrentId] = useState(null)
     const [isCreate, setIsCreate] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
 
     useEffect(() => {
@@ -22,6 +24,8 @@ function PostContextProvider({ children }){
         posts,
         currentId, setCurrentId,
         isCreate, setIsCreate,
+        isSuccess, setIsSuccess,
+        successMsg, setSuccessMsg,
         user, setUser
     }
 
